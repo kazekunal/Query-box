@@ -1,4 +1,4 @@
-.sql-editor-container {
+/* .sql-editor-container {
   display: flex;
   height: 90vh;
   background-color: #F0F0F0;
@@ -24,6 +24,12 @@
   gap: 10px;
   font-weight: 600;
   color: #333;
+}
+
+.editor-title-div{
+  display: flex;
+  flex-direction: row;
+  gap: 24rem;
 }
 
 .editor-content {
@@ -93,6 +99,19 @@
   transition: background-color 0.3s;
 }
 
+.save-btn{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border: 1px solid #D0D0D0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
 .clear-btn {
   background-color: #F0F0F0;
   color: #333;
@@ -149,6 +168,9 @@
   padding: 16px 15px;
   background-color: #F0F0F0;
   border-bottom: 1px solid #E0E0E0;
+  display: flex;
+  flex-direction: row;
+  gap: 26rem;
 }
 
 .results-title {
@@ -156,15 +178,17 @@
   font-family: monospace;
 }
 
+
 .results-content {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding: 15px;
 }
 
 .result-table {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
+  height: 38rem;
 }
 
 .result-table table {
@@ -199,7 +223,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 12px;
   background-color: #FFFFFF;
   border-top: 1px solid #E0E0E0;
 }
@@ -268,4 +292,406 @@
   font-family: monospace;
   color: #666;
   margin: 0 5px;
+} */
+.sql-editor-container {
+  display: flex;
+  height: 90vh;
+  background-color: #f5f7fa;
+  /* border-radius: 8px; */
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
+.sql-editor-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  color: #333;
+  border-right: 1px solid #e6e8ec;
+}
+
+.editor-header {
+  padding: 26px 20px;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e6e8ec;
+}
+
+.editor-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 16px;
+}
+
+.editor-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.query-editor-body {
+  display: flex;
+  overflow: hidden;
+  height: 20rem;
+  border-bottom: 1px solid #e6e8ec;
+}
+
+.line-numbers {
+  background-color: #f8fafc;
+  padding: 12px 8px;
+  text-align: right;
+  color: #94a3b8;
+  border-right: 1px solid #e6e8ec;
+  user-select: none;
+  min-width: 40px;
+}
+
+.line-number {
+  padding-bottom: 6px;
+  padding-right: 10px;
+  font-family: "Fira Code", monospace;
+  font-size: 14px;
+}
+
+.query-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  resize: none;
+  font-family: "Fira Code", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #ffffff;
+  color: #1e293b;
+  height: 100%;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  justify-content: flex-end;
+  border-bottom: 1px solid #e6e8ec;
+}
+
+.clear-btn,
+.run-btn,
+.save-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.save-btn {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.save-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.clear-btn {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.clear-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.run-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.run-btn:hover {
+  background-color: #2563eb;
+}
+
+.save-btn:disabled,
+.clear-btn:disabled,
+.run-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sample-queries-container {
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.sample-queries-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 12px;
+}
+
+.sample-queries-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.sample-query-block {
+  padding: 12px;
+  background-color: #f8fafc;
+  color: #334155;
+  font-family: "Fira Code", monospace;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid #e6e8ec;
+  /* border-radius: 6px; */
+  transition: all 0.2s ease;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sample-query-block:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.query-results-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.results-header {
+  padding: 16px 20px;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e6e8ec;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.results-title-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.results-title {
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.results-subtitle {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.results-stats {
+  font-size: 13px;
+  color: #64748b;
+  background-color: #f1f5f9;
+  padding: 4px 10px;
+  /* border-radius: 12px; */
+}
+
+.results-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-table {
+  flex: 1;
+  overflow: auto;
+  padding: 0;
+}
+
+.result-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #e6e8ec;
+  padding: 10px 16px;
+  color: #334155;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  text-align: left;
+}
+
+.result-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.result-table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.result-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #64748b;
+  text-align: center;
+  padding: 20px;
+}
+
+.no-results h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.no-results p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.pagination-container {
+  padding: 16px;
+  background-color: #ffffff;
+  border-top: 1px solid #e6e8ec;
+}
+
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #f8fafc;
+  border: 1px solid #e6e8ec;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #475569;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-page-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e6e8ec;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #475569;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-page-number:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.pagination-page-number.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.pagination-ellipsis {
+  color: #64748b;
+  margin: 0 4px;
+}
+
+@media (max-width: 1024px) {
+  .sql-editor-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .query-editor-body {
+    height: 15rem;
+  }
+
+  .sample-queries-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

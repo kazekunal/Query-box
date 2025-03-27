@@ -8,6 +8,7 @@ import SqlEditor from "./components/sqlEditor";
 function Home() {
   return (
     <div>
+      {/* <Sidebar/> */}
       <Navbar2/>
     <SqlEditor/>
     </div>
