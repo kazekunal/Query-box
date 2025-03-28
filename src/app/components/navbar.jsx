@@ -9,7 +9,7 @@ import {
   User, 
   Menu 
 } from "lucide-react";
-import "./Navbar.css";
+import "./navbar.css";
 
 export default function Navbar2() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);

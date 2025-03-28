@@ -2,7 +2,7 @@
 import { useState, useMemo, useEffect } from "react"
 import { Play, Database, X, ChevronLeft, ChevronRight } from "lucide-react"
 import Papa from "papaparse"
-import "./sqlEditor.css"
+import "./editor.css"
 
 const SqlEditor = () => {
   const [query, setQuery] = useState("")
