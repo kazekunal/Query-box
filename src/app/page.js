@@ -1,8 +1,6 @@
 'use client'
 import React from "react";
 import Navbar2 from "./components/navbar";
-import Navbar from "./components/navbar";
-import Sidebar from "./components/sidebar";
 import SqlEditor from "./components/sqlEditor";
 
 function Home() {
