@@ -43,10 +43,10 @@ export default function Navbar2() {
                 <FileText size={20} className="navbar-icon" />
                 View Tables
               </Link>
-              <Link href="/history" className="nav-link">
+              {/* <Link href="/history" className="nav-link">
                 <BarChart size={20} className="navbar-icon" />
                 History
-              </Link>
+              </Link> */}
               <Link href="/explore" className="nav-link">
                 <FileText size={20} className="navbar-icon" />
                 Explore

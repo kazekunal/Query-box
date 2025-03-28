@@ -14,7 +14,7 @@ export default function SQLQueriesPage() {
     {
       id: "select-basic",
       category: "SELECT",
-      name: "Basic SELECT Query",
+      name: "Select All Query",
       description: "Retrieve all columns from a table",
       query: "SELECT * FROM Customers;"
     },
@@ -28,7 +28,7 @@ export default function SQLQueriesPage() {
     {
       id: "where-clause",
       category: "SELECT",
-      name: "Filtering with WHERE",
+      name: "Filtering select Query with WHERE",
       description: "Filter rows based on a condition",
       query: "SELECT * FROM Products WHERE Price > 50;",
       
@@ -36,7 +36,7 @@ export default function SQLQueriesPage() {
     {
       id: "update-basic",
       category: "UPDATE",
-      name: "Basic UPDATE Query",
+      name: "UPDATE Query",
       description: "Update values in a specific row",
       query: "UPDATE Customers SET City = 'London' WHERE CustomerID = 1;",
       
@@ -44,7 +44,7 @@ export default function SQLQueriesPage() {
     {
       id: "delete-basic",
       category: "DELETE",
-      name: "Basic DELETE Query",
+      name: "DELETE Query",
       description: "Remove specific rows from a table",
       query: "DELETE FROM Orders WHERE OrderID = 10;",
       
