@@ -7,11 +7,12 @@ import {
   FileText, 
   BarChart, 
   User, 
-  Menu 
+  Menu,
+  X
 } from "lucide-react";
 import "./navbar.css";
 
-export default function Navbar2() {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -25,6 +26,26 @@ export default function Navbar2() {
     };
   }, [isMenuOpen]);
 
+  const navLinks = [
+    { 
+      href: "/", 
+      label: "Editor", 
+      icon: <Code size={20} className="navbar-icon" /> 
+    },
+    { 
+      href: "/tables", 
+      label: "View Tables", 
+      icon: <FileText size={20} className="navbar-icon" /> 
+    },
+    { 
+      href: "/explore", 
+      label: "Explore", 
+      icon: <FileText size={20} className="navbar-icon" /> 
+    }
+  ];
+
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
     <>
       <div className="navbar-container">
@@ -35,22 +56,16 @@ export default function Navbar2() {
             </Link>
 
             <nav className="desktop-nav">
-              <Link href="/" className="nav-link">
-                <Code size={20} className="navbar-icon" />
-                Editor
-              </Link>
-              <Link href="/tables" className="nav-link">
-                <FileText size={20} className="navbar-icon" />
-                View Tables
-              </Link>
-              {/* <Link href="/history" className="nav-link">
-                <BarChart size={20} className="navbar-icon" />
-                History
-              </Link> */}
-              <Link href="/explore" className="nav-link">
-                <FileText size={20} className="navbar-icon" />
-                Explore
-              </Link>
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="nav-link"
+                >
+                  {link.icon}
+                  {link.label}
+                </Link>
+              ))}
             </nav>
 
             <div className="navbar-user">
@@ -67,14 +82,53 @@ export default function Navbar2() {
               <button
                 className="mobile-menu-button"
                 onClick={() => setIsMenuOpen(true)}
+                aria-label="Open Menu"
               >
-                <Menu className="icon" color='#00FF00' />
-                <span className="sr-only">Toggle menu</span>
+                <Menu className="icon" color='#000000' />
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div className="mobile-menu-overlay">
+          <div className="mobile-menu-content">
+            <button 
+              className="mobile-menu-close"
+              onClick={closeMenu}
+              aria-label="Close Menu"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="mobile-user-profile">
+              <div className="mobile-user-icon">
+                <User color='#000000' size={36} />
+              </div>
+              <div className="mobile-user-info">
+                <span className="mobile-user-name">Kunal Passan</span>
+                <span className="mobile-user-email">kunalpassan30@gmail.com</span>
+              </div>
+            </div>
+
+            <nav className="mobile-nav">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="mobile-nav-link"
+                  onClick={closeMenu}
+                >
+                  {link.icon}
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
     </>
   );
 }

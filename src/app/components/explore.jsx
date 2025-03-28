@@ -31,7 +31,6 @@ export default function SQLQueriesPage() {
       name: "Filtering select Query with WHERE",
       description: "Filter rows based on a condition",
       query: "SELECT * FROM Products WHERE Price > 50;",
-      
     },
     {
       id: "update-basic",
@@ -39,7 +38,6 @@ export default function SQLQueriesPage() {
       name: "UPDATE Query",
       description: "Update values in a specific row",
       query: "UPDATE Customers SET City = 'London' WHERE CustomerID = 1;",
-      
     },
     {
       id: "delete-basic",
@@ -47,7 +45,6 @@ export default function SQLQueriesPage() {
       name: "DELETE Query",
       description: "Remove specific rows from a table",
       query: "DELETE FROM Orders WHERE OrderID = 10;",
-      
     },
     {
       id: "join-inner",
@@ -62,7 +59,6 @@ export default function SQLQueriesPage() {
       name: "COUNT Function",
       description: "Count the number of rows matching a condition",
       query: "SELECT COUNT(*) FROM Products WHERE Price < 20;",
-      
     },
     {
       id: "group-by",
@@ -93,7 +89,25 @@ export default function SQLQueriesPage() {
       <main className="main-content">
         <div className="sql-queries-container">
           <div className="sql-queries-sidebar">
-            
+            <div className="mobile-category-tabs">
+              <div 
+                className={`mobile-category-tab ${selectedCategory === null ? "active" : ""}`}
+                onClick={() => setSelectedCategory(null)}
+              >
+                <Database size={16} />
+                All Queries
+              </div>
+              {categories.map((category) => (
+                <div
+                  key={category}
+                  className={`mobile-category-tab ${selectedCategory === category ? "active" : ""}`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  <Code size={16} />
+                  {category}
+                </div>
+              ))}
+            </div>
 
             <div className="categories-list">
               <h3 className="categories-heading">Categories</h3>
@@ -136,7 +150,7 @@ export default function SQLQueriesPage() {
                       <p>{query.description}</p>
                     </div>
                     <pre className="query-code">
-                      <code style={{color:'#000000' , overflowX: "scroll"}}>{query.query}</code>
+                      <code style={{color:'#000000'}}>{query.query}</code>
                     </pre>
                   </div>
                 ))}
