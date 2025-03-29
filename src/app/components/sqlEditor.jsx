@@ -1,8 +1,36 @@
 "use client"
-import { useState, useMemo, useEffect } from "react"
-import { Play, Database, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { useState, useMemo, useEffect, useCallback } from "react"
+import { Play, Database, X, ChevronLeft, ChevronRight, Download } from "lucide-react"
 import Papa from "papaparse"
 import "./editor.css"
+import ReactCodeMirror from '@uiw/react-codemirror'
+import { sql } from '@codemirror/lang-sql'
+import { githubLight } from '@uiw/codemirror-theme-github'
+
+// Debounce function
+const debounce = (func, delay) => {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};
+
+// Throttle function
+const throttle = (func, limit) => {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  };
+};
 
 const SqlEditor = () => {
   const [query, setQuery] = useState("")
@@ -11,6 +39,9 @@ const SqlEditor = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [csvData, setCsvData] = useState([])
   const [queryHistory, setQueryHistory] = useState([])
+  const [tabs, setTabs] = useState([{ id: 1, name: "Query 1", query: "" }])
+  const [activeTab, setActiveTab] = useState(1)
+  const [isExporting, setIsExporting] = useState(false)
   const itemsPerPage = 15
 
   const CSV_URL =
@@ -18,25 +49,24 @@ const SqlEditor = () => {
 
   useEffect(() => {
     const loadCsvFile = async () => {
-      setIsLoading(true) // loading so that the csv file can be fetched
+      setIsLoading(true)
       try {
         const response = await fetch(CSV_URL)
         const csvText = await response.text()
 
-        // Important - Using Papaparse as it is the fastest CSV parser for web browsers
         Papa.parse(csvText, {
           header: true,
           complete: (results) => {
-            setCsvData(results.data) //fetching data from here -->
+            setCsvData(results.data)
             setIsLoading(false)
           },
           error: (error) => {
-            console.error("CSV Parsing Error:", error) //placed checks here and logged the errors
+            console.error("CSV Parsing Error:", error)
             setIsLoading(false)
           },
         })
       } catch (error) {
-        console.error("Failed to fetch CSV:", error) //placed checks here and logged the errors
+        console.error("Failed to fetch CSV:", error)
         setIsLoading(false)
       }
     }
@@ -47,40 +77,125 @@ const SqlEditor = () => {
     if (savedHistory) {
       setQueryHistory(JSON.parse(savedHistory))
     }
-  }, []) //empty array useEffect which runs it only once at the first render
+  }, [])
 
-  const handleQueryChange = (e) => {
-    setQuery(e.target.value)
+  const handleQueryChange = (newQuery) => {
+    setQuery(newQuery)
+
+    const updatedTabs = tabs.map(tab => 
+      tab.id === activeTab ? { ...tab, query: newQuery } : tab
+    )
+    setTabs(updatedTabs)
+    
+    // debounced the save to storage function
+    debouncedSaveToStorage(updatedTabs)
   }
+
+  // Debounced function to save query to localStorage
+  const debouncedSaveToStorage = useCallback(
+    debounce((updatedTabs) => {
+      localStorage.setItem("queryTabs", JSON.stringify(updatedTabs))
+      console.log("Saved to local storage")
+    }, 1000),
+    []
+  )
 
   const handleClearQuery = () => {
     setQuery("")
+    
+    const updatedTabs = tabs.map(tab => 
+      tab.id === activeTab ? { ...tab, query: "" } : tab
+    )
+    setTabs(updatedTabs)
+    debouncedSaveToStorage(updatedTabs)
   }
 
-  const handleRunQuery = () => {
-    if (!query.trim()) return
+  // Throttled run query to prevent rapid executions
+  const throttledRunQuery = useCallback(
+    throttle(() => {
+      if (!query.trim()) return
 
-    setResults([
-      {
-        columns: Object.keys(csvData[0] || {}),
-        data: csvData.map((row) => Object.values(row)),
-      },
-    ])
-    setCurrentPage(1) 
+      setIsLoading(true)
+      
+      // Simulate a delay to show loading state (remove this in production)
+      setTimeout(() => {
+        setResults([
+          {
+            columns: Object.keys(csvData[0] || {}),
+            data: csvData.map((row) => Object.values(row)),
+          },
+        ])
+        setCurrentPage(1)
+        setIsLoading(false)
+        
+        // Add to query history
+        const newHistory = [
+          { id: Date.now(), query, timestamp: new Date().toISOString() },
+          ...queryHistory.slice(0, 9) // Keep only the last 10 queries
+        ]
+        setQueryHistory(newHistory)
+        localStorage.setItem("queryHistory", JSON.stringify(newHistory))
+      }, 500)
+    }, 500), // Throttle to once per second
+    [query, csvData, queryHistory]
+  )
+
+  const handleRunQuery = () => {
+    throttledRunQuery()
   }
 
   const handleSampleQueryClick = (sampleQuery) => {
     setQuery(sampleQuery)
+    
+    // Update the query in the active tab
+    const updatedTabs = tabs.map(tab => 
+      tab.id === activeTab ? { ...tab, query: sampleQuery } : tab
+    )
+    setTabs(updatedTabs)
+    debouncedSaveToStorage(updatedTabs)
   }
 
-  //sample SQL Queries mentioned
+
+  // Debounced function to export results to CSV
+  const debouncedExportToCsv = useCallback(
+    debounce(() => {
+      if (results.length === 0 || isExporting) return
+      
+      setIsExporting(true)
+      
+      try {
+        const csv = Papa.unparse({
+          fields: results[0].columns,
+          data: results[0].data
+        })
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.setAttribute('href', url)
+        link.setAttribute('download', `query_results_${new Date().toISOString().slice(0,10)}.csv`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        
+        console.log("CSV exported successfully")
+      } catch (error) {
+        console.error("Failed to export CSV:", error)
+      } finally {
+        setIsExporting(false)
+      }
+    }, 800),
+    [results, isExporting]
+  )
+
+  // Sample SQL Queries
   const sampleQueries = [
     "SELECT * FROM orders;",
     "SELECT OrderID, CustomerID FROM orders;",
     'SELECT * FROM orders WHERE OrderDate > "1997-01-01";',
     "SELECT CustomerID, COUNT(*) FROM orders GROUP BY CustomerID;",
     'DELETE FROM Orders WHERE OrderID = 10;',
-    "UPDATE Customers SET City = 'London' WHERE CustomerID = 1;",
+    "SELECT Orders.OrderID, Customers.CustomerName FROM Orders INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;",
   ]
 
   // Pagination Logic
@@ -130,19 +245,14 @@ const SqlEditor = () => {
 
         <div className="editor-content">
           <div className="query-editor-body">
-            <div className="line-numbers">
-              {Array.from({ length: 16 }, (_, i) => i + 1).map((number) => (
-                <div key={number} className="line-number">
-                  {number}
-                </div>
-              ))}
-            </div>
-            <textarea
-              className="query-input"
+            <ReactCodeMirror
               value={query}
               onChange={handleQueryChange}
-              placeholder={`-- Write your SQL query here\n-- Example: SELECT * FROM orders`}
-              spellCheck="false"
+              extensions={[sql()]}
+              theme={githubLight}
+              placeholder="-- Write your SQL query here
+-- Example: SELECT * FROM orders"
+              className="codemirror-wrapper"
             />
           </div>
 
@@ -153,6 +263,15 @@ const SqlEditor = () => {
             <button className="run-btn" onClick={handleRunQuery} disabled={isLoading || !query.trim()}>
               <Play size={16} /> {isLoading ? "Loading..." : "Run"}
             </button>
+            {results.length > 0 && (
+              <button 
+                className="export-btn" 
+                onClick={debouncedExportToCsv}
+                disabled={isExporting}
+              >
+                <Download size={16} /> {isExporting ? "Exporting..." : "Export CSV"}
+              </button>
+            )}
           </div>
 
           <div className="sample-queries-container">

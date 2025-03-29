@@ -9,6 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.8.0",
+    "@codemirror/lang-sql": "^6.8.0",
+    "@codemirror/language": "^6.11.0",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.36.5",
+    "@uiw/codemirror-theme-github": "^4.23.10",
+    "@uiw/react-codemirror": "^4.23.10",
+    "codemirror": "^6.0.1",
     "lucide-react": "^0.484.0",
     "next": "15.2.4",
     "papaparse": "^5.5.2",

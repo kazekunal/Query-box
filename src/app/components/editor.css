@@ -1,298 +1,4 @@
-/* .sql-editor-container {
-  display: flex;
-  height: 90vh;
-  background-color: #F0F0F0;
-}
 
-.sql-editor-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #F0F0F0;
-  color: #333;
-}
-
-.editor-header {
-  padding: 16px 15px;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E0E0E0;
-}
-
-.editor-title {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  font-weight: 600;
-  color: #333;
-}
-
-.editor-title-div{
-  display: flex;
-  flex-direction: row;
-  gap: 24rem;
-}
-
-.editor-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow: hidden;
-}
-
-.query-editor-body {
-  display: flex;
-  overflow: hidden;
-  height: 20rem;
-}
-
-.line-numbers {
-  background-color: #FFFFFF;
-  padding: 10px 5px;
-  text-align: right;
-  color: #666;
-  border-right: 1px solid #E0E0E0;
-  user-select: none;
-  padding-top: 12px;
-}
-
-.line-number {
-  padding-bottom: 6px;
-  padding-right: 10px;
-  font-family: monospace;
-  font-size: 14px;
-}
-
-.query-input {
-  flex: 1;
-  border: 1px solid #E0E0E0;
-  outline: none;
-  padding: 10px;
-  resize: none;
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  background-color: #FFFFFF;
-  color: #333;
-  height: 100%;
-}
-
-.editor-actions {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  background-color: #FFFFFF;
-  justify-content: flex-end;
-  border-top: 1px solid #E0E0E0;
-}
-
-.clear-btn,
-.run-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 16px;
-  border: 1px solid #D0D0D0;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: monospace;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-.save-btn{
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 16px;
-  border: 1px solid #D0D0D0;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: monospace;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-.clear-btn {
-  background-color: #F0F0F0;
-  color: #333;
-}
-
-.run-btn {
-  background-color: #4A90E2;
-  color: white;
-}
-
-.clear-btn:hover,
-.run-btn:hover {
-  opacity: 0.9;
-}
-
-.sample-queries-horizontal {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.sample-query-block {
-  padding: 10px;
-  background-color: #F8F8F8;
-  color: #333;
-  text-align: center;
-  font-family: monospace;
-  font-size: 14px;
-  cursor: pointer;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  transition: 
-      background-color 0.3s ease,
-      transform 0.2s ease;
-}
-
-.sample-query-block:hover {
-  background-color: #F0F0F0;
-  transform: scale(1.03);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.query-results-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #FFFFFF;
-}
-
-.results-header {
-  padding: 16px 15px;
-  background-color: #F0F0F0;
-  border-bottom: 1px solid #E0E0E0;
-  display: flex;
-  flex-direction: row;
-  gap: 26rem;
-}
-
-.results-title {
-  color: #333;
-  font-family: monospace;
-}
-
-
-.results-content {
-  flex: 1;
-  overflow-y: hidden;
-  padding: 15px;
-}
-
-.result-table {
-  width: 100%;
-  overflow-x: hidden;
-  height: 38rem;
-}
-
-.result-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.result-table th,
-.result-table td {
-  border: 1px solid #E0E0E0;
-  padding: 8px;
-  color: #333;
-  font-family: monospace;
-  font-size: 14px;
-  text-align: left;
-}
-
-.result-table th {
-  background-color: #F0F0F0;
-  color: #333;
-  font-weight: 600;
-}
-
-.no-results {
-  margin-top: 12rem;
-  color: #666;
-  text-align: center;
-  padding: 20px;
-  font-family: monospace;
-}
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
-  background-color: #FFFFFF;
-  border-top: 1px solid #E0E0E0;
-}
-
-.pagination-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.pagination-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: #F0F0F0;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination-button:hover {
-  background-color: #E0E0E0;
-}
-
-.pagination-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-  background-color: #F8F8F8;
-}
-
-.pagination-pages {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.pagination-page-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 14px;
-  color: #333;
-  background-color: #FFFFFF;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination-page-number:hover {
-  background-color: #F0F0F0;
-}
-
-.pagination-page-number.active {
-  background-color: #4A90E2;
-  color: white;
-}
-
-.pagination-ellipsis {
-  font-family: monospace;
-  color: #666;
-  margin: 0 5px;
-} */
 .sql-editor-container {
   display: flex;
   height: 90vh;
@@ -693,5 +399,126 @@
   .sample-queries-grid {
     grid-template-columns: 1fr;
   }
+}
+/* Add these to your existing editor.css file */
+
+/* CodeMirror container styling */
+.codemirror-wrapper {
+  width: 100%;
+  height: 100%;
+  font-family: "Fira Code", monospace;
+  font-size: 14px;
+}
+
+/* Make sure the CodeMirror editor takes up all available space */
+.cm-editor {
+  height: 100%;
+  width: 100%;
+}
+
+/* Optional: Style the gutter/line numbers */
+.cm-gutters {
+  background-color: #f8fafc !important;
+  border-right: 1px solid #e6e8ec !important;
+  color: #94a3b8 !important;
+}
+
+/* Optional: Style the active line */
+.cm-activeLine {
+  background-color: rgba(232, 244, 253, 0.5) !important;
+}
+
+/* Optional: Style the cursor */
+.cm-cursor {
+  border-left: 2px solid #3b82f6 !important;
+}
+
+/* Optional: Style the selection */
+.cm-selectionBackground {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Optional: Add some padding to the content */
+.cm-content {
+  padding: 8px 0 !important;
+}
+
+/* Make sure CodeMirror gets proper focus styles */
+.cm-focused {
+  outline: none !important;
+}
+
+/* Tab styles */
+.tabs-container {
+  display: flex;
+  overflow-x: auto;
+  margin-top: 10px;
+  padding-bottom: 5px;
+}
+
+.tab {
+  padding: 8px 16px;
+  background-color: #f1f5f9;
+  margin-right: 5px;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.active-tab {
+  background-color: #e2e8f0;
+  border-bottom: 2px solid #3b82f6;
+  font-weight: 500;
+}
+
+.add-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: #f8fafc;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 18px;
+  transition: background-color 0.2s;
+}
+
+.add-tab:hover {
+  background-color: #e2e8f0;
+}
+
+/* Export button */
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  background-color: #22c55e;
+  color: white;
+}
+
+.export-btn:hover {
+  background-color: #16a34a;
+}
+
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Make editor header flex container */
+.editor-header {
+  display: flex;
+  flex-direction: column;
 }
 
