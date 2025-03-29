@@ -1,10 +1,12 @@
 "use client"
 import { useState, useEffect } from "react"
 import Navbar2 from "./navbar"
-import { Database, Code, Search, Info } from "lucide-react"
+import { Database, Code, Search, Info, Copy, ArrowRight } from "lucide-react"
 import "./explore.css"
+import { useRouter } from "next/navigation"
 
 export default function SQLQueriesPage() {
+  const router = useRouter()
   const [queries, setQueries] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
@@ -83,6 +85,16 @@ export default function SQLQueriesPage() {
      query.description.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
+  const copytoClip = (query) => {
+    navigator.clipboard.writeText(query)
+      .then(() => {
+        router.push('/') // Redirect to editor page
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err)
+      })
+  }
+
   return (
     <div className="app-container">
       <Navbar2 />
@@ -149,9 +161,19 @@ export default function SQLQueriesPage() {
                       <Info size={14} />
                       <p>{query.description}</p>
                     </div>
-                    <pre className="query-code">
-                      <code style={{color:'#000000'}}>{query.query}</code>
-                    </pre>
+                    <div className="query-code-container">
+                      <pre className="query-code">
+                        <code style={{color:'#000000'}}>{query.query}</code>
+                      </pre>
+                    </div>
+                    <button 
+                      className="use-query-button"
+                      onClick={() => copytoClip(query.query)}
+                    >
+                      <Copy size={14} />
+                      Use this query
+                      <ArrowRight size={14} />
+                    </button>
                   </div>
                 ))}
               </div>

@@ -79,6 +79,8 @@ const SqlEditor = () => {
     "SELECT OrderID, CustomerID FROM orders;",
     'SELECT * FROM orders WHERE OrderDate > "1997-01-01";',
     "SELECT CustomerID, COUNT(*) FROM orders GROUP BY CustomerID;",
+    'DELETE FROM Orders WHERE OrderID = 10;',
+    "UPDATE Customers SET City = 'London' WHERE CustomerID = 1;",
   ]
 
   // Pagination Logic
