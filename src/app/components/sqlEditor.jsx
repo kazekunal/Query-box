@@ -184,7 +184,7 @@ const SqlEditor = () => {
       } finally {
         setIsExporting(false)
       }
-    }, 800),
+    }, 1000),
     [results, isExporting]
   )
 
